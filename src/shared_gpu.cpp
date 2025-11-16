@@ -11,7 +11,13 @@
 constexpr double PI = std::numbers::pi;
 using Clock = std::chrono::high_resolution_clock;
 
+// Source term function
 double f(double x, double y) { return -8 * PI * PI * sin(2 * PI * x) * sin(2 * PI * y); }
+
+// GPU Kernels
+void __global__ update_grid() {}
+
+void __global__ compute_residual() {}
 
 int main(int argc, char* argv[]) {
     // Parse command line arguments for verbosity and grid size
@@ -58,15 +64,6 @@ int main(int argc, char* argv[]) {
     while (true) {
         // Compute residual
         double max_residual = 0.0;
-        for (int i = 1; i < N - 1; ++i) {
-            for (int j = 1; j < N - 1; ++j) {
-                double y_partial = (u[(i - 1) * N + j] - 2 * u[i * N + j] + u[(i + 1) * N + j]) / (h * h);
-                double x_partial = (u[i * N + (j - 1)] - 2 * u[i * N + j] + u[i * N + (j + 1)]) / (h * h);
-                double gradient = x_partial + y_partial;
-                double residual = std::abs(gradient - f_values[i * N + j]);
-                max_residual = std::max(max_residual, residual);
-            }
-        }
 
         // Optional verbose output
         if (verbose && iterations % 1000 == 0) {
@@ -79,13 +76,6 @@ int main(int argc, char* argv[]) {
         } 
 
         // Update internal grid points
-        for (int i = 1; i < N - 1; ++i) {
-            for (int j = 1; j < N - 1; ++j) {
-                double f_term = f_values[i * N + j] * h * h * -1;
-                double neighbor_term = u[(i - 1) * N + j] + u[(i + 1) * N + j] + u[i * N + (j - 1)] + u[i * N + (j + 1)];
-                u_new[i * N + j] = 0.25 * (neighbor_term + f_term);
-            }
-        }
 
         // Swap grids and increment iteration count
         std::swap(u, u_new);

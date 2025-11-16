@@ -40,6 +40,9 @@ int main(int argc, char* argv[]) {
     }
     std::cout << "Using grid size N = " << N << std::endl;
 
+    // Begin timing
+    auto start_time = Clock::now();
+
     // Define constants
     const double start = 0.0;
     const double end = 1.0;
@@ -57,9 +60,6 @@ int main(int argc, char* argv[]) {
             f_values[i * N + j] = f(x, y);
         }
     }
-
-    // Begin timing
-    auto start_time = Clock::now();
 
     // Jacobi iteration
     int iterations = 0;

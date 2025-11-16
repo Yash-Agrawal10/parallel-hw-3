@@ -56,6 +56,9 @@ int main(int argc, char* argv[]) {
         std::cout << "Using grid size N = " << N << std::endl;
     }
 
+    // Begin timing
+    auto start_time = Clock::now();
+
     // Define global constants
     const double start = 0.0;
     const double end = 1.0;
@@ -86,9 +89,6 @@ int main(int argc, char* argv[]) {
     std::vector<double> recv_previous_i(N, 0.0);
     std::vector<double> send_next_i(N, 0.0);
     std::vector<double> recv_next_i(N, 0.0);
-
-    // Begin timing
-    auto start_time = Clock::now();
 
     // Jacobi iteration
     int iterations = 0;
