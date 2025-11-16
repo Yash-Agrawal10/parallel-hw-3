@@ -1,5 +1,5 @@
 {
-  "C_Cpp.default.compilerPath": "/opt/homebrew/opt/llvm/bin/clang++",
+  "C_Cpp.default.compilerPath": "/opt/rocm-7.1.0/bin/hipcc",
   "C_Cpp.default.cppStandard": "c++20",
   "C_Cpp.default.compilerArgs": [
     "-Wall",
@@ -11,28 +11,12 @@
   "C_Cpp.default.includePath": [
     "${workspace}/**",
     "/opt/homebrew/opt/llvm/include",
-    "/opt/homebrew/opt/open-mpi/include"
+    "/opt/homebrew/opt/open-mpi/include",
+    "/opt/rocm-7.1.0/include"
   ],
-  "files.associations": {
-    "string": "cpp",
-    "numbers": "cpp",
-    "__verbose_abort": "cpp",
-    "cctype": "cpp",
-    "cmath": "cpp",
-    "complex": "cpp",
-    "cstddef": "cpp",
-    "cstdint": "cpp",
-    "cstdlib": "cpp",
-    "cwchar": "cpp",
-    "cwctype": "cpp",
-    "initializer_list": "cpp",
-    "iosfwd": "cpp",
-    "limits": "cpp",
-    "new": "cpp",
-    "sstream": "cpp",
-    "stdexcept": "cpp",
-    "typeinfo": "cpp",
-    "algorithm": "cpp",
-    "iostream": "cpp"
-  }
+  "C_Cpp.default.defines": [
+    "__HIP__=1",
+    "__HIP_PLATFORM_AMD__",
+    "__HIPCC__"
+  ],
 }

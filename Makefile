@@ -13,10 +13,21 @@ OPENMP_FLAGS := -fopenmp
 
 SRC_DIR := ./src
 OUT_DIR := ./bin
+OUTPUT_DIR      := ./output
+OUTPUT_SUBDIRS  := $(OUTPUT_DIR)/sequential \
+                   $(OUTPUT_DIR)/openmp     \
+                   $(OUTPUT_DIR)/openmpi    \
+                   $(OUTPUT_DIR)/shared_gpu
 
 .PHONY: all clean
 
-all: $(OUT_DIR)/sequential $(OUT_DIR)/openmp $(OUT_DIR)/openmpi
+all: $(OUT_DIR)/sequential $(OUT_DIR)/openmp $(OUT_DIR)/openmpi $(OUT_DIR)/shared_gpu $(OUTPUT_SUBDIRS)
+
+$(OUTPUT_DIR):
+	@mkdir -p $@
+
+$(OUTPUT_SUBDIRS): | $(OUTPUT_DIR)
+	@mkdir -p $@
 
 $(OUT_DIR):
 	@mkdir -p $@
@@ -29,6 +40,9 @@ $(OUT_DIR)/openmp: $(SRC_DIR)/openmp.cpp | $(OUT_DIR)
 
 $(OUT_DIR)/openmpi: $(SRC_DIR)/openmpi.cpp | $(OUT_DIR)
 	$(MPICXX) $(MPICXXFLAGS) -o $@ $<
+
+$(OUT_DIR)/shared_gpu: $(SRC_DIR)/shared_gpu.hip.cpp | $(OUT_DIR)
+	hipcc -o $@ $<
 
 clean:
 	rm -f $(OUT_DIR)/*
