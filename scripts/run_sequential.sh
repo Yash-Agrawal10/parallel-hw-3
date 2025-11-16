@@ -7,4 +7,5 @@
 #SBATCH -t 00:10:00
 
 echo "Running: ./bin/sequential $@"
+mkdir -p ./output/sequential
 srun ./bin/sequential "$@"

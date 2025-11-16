@@ -7,4 +7,5 @@
 #SBATCH -t 00:10:00
 
 echo "Running: ./bin/openmpi $@"
+mkdir -p ./output/openmpi
 srun ./bin/openmpi "$@"
