@@ -9,5 +9,4 @@
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 echo "Running: ./bin/openmp $@"
-mkdir -p ./output/openmp
 srun ./bin/openmp "$@"
