@@ -1,0 +1,82 @@
+{
+    "configurations": [
+        {
+            "name": "Default",
+            "compilerPath": "/opt/rocm-7.1.0/bin/hipcc",
+            "cppStandard": "c++20",
+            "compilerArgs": [
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-Wshadow",
+                "-fopenmp"
+            ]
+        },
+        {
+            "name": "OpenMP",
+            "compilerPath": "/opt/ohpc/pub/compiler/gcc/12.2.0/bin/g++",
+            "cppStandard": "c++20",
+            "compilerArgs": [
+                "-fopenmp",
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-Wshadow",
+                "-fopenmp"
+            ]
+        },
+        {
+            "name": "MPI",
+            "compilerPath": "/opt/ohpc/pub/mpi/openmpi4-gnu12/4.1.8/bin/mpic++",
+            "cppStandard": "c++20",
+            "compilerArgs": [
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-Wshadow"
+            ]
+        },
+        {
+            "name": "HIP",
+            "compilerPath": "/opt/rocm-7.1.0/bin/hipcc",
+            "cppStandard": "c++17",
+            "compilerArgs": [
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-Wshadow",
+                "-fopenmp"
+            ],
+            "includePath": [
+                "/opt/rocm-7.1.0/include"
+            ],
+            "defines": [
+                "__HIP__=1",
+                "__HIP_PLATFORM_AMD__",
+                "__HIPCC__"
+            ]
+        },
+        {
+            "name": "MPI+HIP",
+            "compilerPath": "/opt/rocm-7.1.0/bin/hipcc",
+            "cppStandard": "c++17",
+            "compilerArgs": [
+                "-Wall",
+                "-Wextra",
+                "-Wpedantic",
+                "-Wshadow"
+            ],
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/rocm-7.1.0/include",
+                "/opt/ohpc/pub/mpi/openmpi4-gnu12/4.1.8/include"
+            ],
+            "defines": [
+                "__HIP__=1",
+                "__HIP_PLATFORM_AMD__",
+                "__HIPCC__"
+            ]
+        }
+    ],
+    "version": 4
+}

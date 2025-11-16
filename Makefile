@@ -1,15 +1,7 @@
-# Compilers
-CXX      ?= clang++
-MPICXX   := mpicxx
-
 # Flags
 COMMON_WARN := -Wall -Wextra -Wpedantic -Wshadow
 OPT         := -O2
-CXXFLAGS   := -std=c++20 $(COMMON_WARN) $(OPT)
-MPICXXFLAGS:= -std=c++20 $(COMMON_WARN) $(OPT)
-
-# OpenMP
-OPENMP_FLAGS := -fopenmp
+CXXFLAGS    := -std=c++20 $(COMMON_WARN) $(OPT)
 
 SRC_DIR := ./src
 OUT_DIR := ./bin
@@ -33,13 +25,13 @@ $(OUT_DIR):
 	@mkdir -p $@
 
 $(OUT_DIR)/sequential: $(SRC_DIR)/sequential.cpp | $(OUT_DIR)
-	$(CXX) $(CXXFLAGS) -o $@ $<
+	g++ $(CXXFLAGS) -o $@ $<
 
 $(OUT_DIR)/openmp: $(SRC_DIR)/openmp.cpp | $(OUT_DIR)
-	$(CXX) $(CXXFLAGS) $(OPENMP_FLAGS) -o $@ $< $(OPENMP_LIBS)
+	g++ $(CXXFLAGS) -fopenmp -o $@ $<
 
 $(OUT_DIR)/openmpi: $(SRC_DIR)/openmpi.cpp | $(OUT_DIR)
-	$(MPICXX) $(MPICXXFLAGS) -o $@ $<
+	mpic++ $(CXXFLAGS) -o $@ $<
 
 $(OUT_DIR)/shared_gpu: $(SRC_DIR)/shared_gpu.hip.cpp | $(OUT_DIR)
 	hipcc -o $@ $<
