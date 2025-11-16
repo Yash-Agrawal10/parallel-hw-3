@@ -9,7 +9,7 @@
 constexpr double PI = std::numbers::pi;
 using Clock = std::chrono::high_resolution_clock;
 
-double f(double x, double y) { return -8 * PI * PI * sin(2 * PI * x) * cos(2 * PI * y); }
+double f(double x, double y) { return -8 * PI * PI * sin(2 * PI * x) * sin(2 * PI * y); }
 
 int main(int argc, char* argv[]) {
     // Parse command line arguments for verbosity and grid size

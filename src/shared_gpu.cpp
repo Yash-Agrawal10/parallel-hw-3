@@ -1,4 +1,4 @@
-#include <omp.h>
+#include <hip/hip_runtime.h>
 
 #include <chrono>
 #include <cmath>
@@ -14,14 +14,6 @@ using Clock = std::chrono::high_resolution_clock;
 double f(double x, double y) { return -8 * PI * PI * sin(2 * PI * x) * sin(2 * PI * y); }
 
 int main(int argc, char* argv[]) {
-    // Verify OpenMP is available
-#ifdef _OPENMP
-    std::cout << "OpenMP is enabled with " << omp_get_max_threads() << " threads." << std::endl;
-#else
-    std::cerr << "Error: OpenMP is not enabled. Please compile with OpenMP support." << std::endl;
-    return 1;
-#endif
-
     // Parse command line arguments for verbosity and grid size
     bool verbose = false;
     int N = 256;
@@ -46,7 +38,7 @@ int main(int argc, char* argv[]) {
     const double h = (end - start) / (N - 1);
     const double tolerance = 1e-3;
 
-    // Initialize the grid, new grid, and f values
+    // Initialize the grid and new grid
     std::vector<double> u(N * N, 0.0);
     std::vector<double> u_new(N * N, 0.0);
     std::vector<double> f_values(N * N, 0.0);
@@ -66,7 +58,6 @@ int main(int argc, char* argv[]) {
     while (true) {
         // Compute residual
         double max_residual = 0.0;
-#pragma omp parallel for collapse(2) reduction(max : max_residual)
         for (int i = 1; i < N - 1; ++i) {
             for (int j = 1; j < N - 1; ++j) {
                 double y_partial = (u[(i - 1) * N + j] - 2 * u[i * N + j] + u[(i + 1) * N + j]) / (h * h);
@@ -85,16 +76,13 @@ int main(int argc, char* argv[]) {
         // Check for convergence
         if (max_residual < tolerance) {
             break;
-        }
+        } 
 
         // Update internal grid points
-#pragma omp parallel for
         for (int i = 1; i < N - 1; ++i) {
-#pragma omp simd
             for (int j = 1; j < N - 1; ++j) {
                 double f_term = f_values[i * N + j] * h * h * -1;
-                double neighbor_term =
-                    u[(i - 1) * N + j] + u[(i + 1) * N + j] + u[i * N + (j - 1)] + u[i * N + (j + 1)];
+                double neighbor_term = u[(i - 1) * N + j] + u[(i + 1) * N + j] + u[i * N + (j - 1)] + u[i * N + (j + 1)];
                 u_new[i * N + j] = 0.25 * (neighbor_term + f_term);
             }
         }
