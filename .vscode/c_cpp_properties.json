@@ -58,7 +58,7 @@
         },
         {
             "name": "MPI+HIP",
-            "compilerPath": "/opt/rocm-7.1.0/bin/hipcc",
+            "compilerPath": "/opt/ohpc/pub/mpi/openmpi4-gnu12/4.1.8/bin/mpic++",
             "cppStandard": "c++17",
             "compilerArgs": [
                 "-Wall",

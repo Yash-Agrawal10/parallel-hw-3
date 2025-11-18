@@ -1,7 +1,7 @@
 # Flags
 COMMON_WARN := -Wall -Wextra -Wpedantic -Wshadow
 OPT         := -O2
-CXXFLAGS    := -std=c++20 $(COMMON_WARN) $(OPT)
+CXXFLAGS    := -std=c++20 $(COMMON_WARN) $(OPT) 
 
 SRC_DIR := ./src
 OUT_DIR := ./bin
@@ -13,7 +13,7 @@ OUTPUT_SUBDIRS  := $(OUTPUT_DIR)/sequential \
 
 .PHONY: all clean
 
-all: $(OUT_DIR)/sequential $(OUT_DIR)/openmp $(OUT_DIR)/openmpi $(OUT_DIR)/shared_gpu $(OUTPUT_SUBDIRS)
+all: $(OUT_DIR)/sequential $(OUT_DIR)/openmp $(OUT_DIR)/openmpi $(OUT_DIR)/shared_gpu $(OUT_DIR)/distributed_gpu $(OUTPUT_SUBDIRS)
 
 $(OUTPUT_DIR):
 	@mkdir -p $@
@@ -31,10 +31,13 @@ $(OUT_DIR)/openmp: $(SRC_DIR)/openmp.cpp | $(OUT_DIR)
 	g++ $(CXXFLAGS) -fopenmp -o $@ $<
 
 $(OUT_DIR)/openmpi: $(SRC_DIR)/openmpi.cpp | $(OUT_DIR)
-	mpic++ $(CXXFLAGS) -o $@ $<
+	mpicxx $(CXXFLAGS) -o $@ $<
 
 $(OUT_DIR)/shared_gpu: $(SRC_DIR)/shared_gpu.hip.cpp | $(OUT_DIR)
-	hipcc -o $@ $<
+	hipcc $(CXXFLAGS)-o $@ $<
+
+$(OUT_DIR)/distributed_gpu: $(SRC_DIR)/distributed_gpu.hip.cpp | $(OUT_DIR)
+	OMPI_CXX=hipcc mpicxx $(CXXFLAGS) -o $@ $<
 
 clean:
 	rm -f $(OUT_DIR)/*
